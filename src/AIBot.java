@@ -1,6 +1,6 @@
 import javafx.util.Pair;
 
-public class AIBot {
+public class Agent {
 
     private short board_6_x_6[][];
     private short symbol;
@@ -22,18 +22,16 @@ public class AIBot {
     }
 
     private short getOpponentSymbol(short symbol){
-        if(symbol == this.symbol)
+        if (symbol == this.symbol)
             return oppSymbol;
         return this.symbol;
     }
 
     private short[] calculateNextMove(short board_6_x_6[][], boolean min, short symbol){
+        
         short board[][] = board_6_x_6.clone();
         short result[] = new short[3];
-        if(min)
-            result[0] = Short.MAX_VALUE;
-        else
-            result[0] = Short.MIN_VALUE;
+        if(min) result[0] = Short.MAX_VALUE; else result[0] = Short.MIN_VALUE;
 
         boolean leafNode = true;
         for(short row = 0; row < 3; row++){
@@ -61,12 +59,12 @@ public class AIBot {
         }
 
         if(leafNode){
-            // check if ai won
+            // check if agent won
             if(checkIfPlayerWon(this.symbol)) {
                 result[0] = 1;
                 return result;
             }
-            // check if opponent won
+            // check if player won
             if(checkIfPlayerWon(oppSymbol)) {
                 result[0] = -1;
                 return result;
@@ -117,29 +115,18 @@ public class AIBot {
         return false;
     }
 
-    // ------------
-    //|   | O |   |
-    //| X | X | O |
-    //| O |   |   |
-    // ------------
-
     public static void main(String args[]){
         short board[][] = new short[3][3];
         for(int i = 0; i < 3; i++)
             for(int j = 0; j < 3; j++)
                 board[i][j] = -1;
-
-        board[0][1] = 0;
-        board[1][0] = 1;
-        board[1][1] = 1;
-        board[1][2] = 0;
-        board[2][0] = 0;
+        
+        board[0][1] = 0; board[1][0] = 1; board[1][1] = 1; board[1][2] = 0; board[2][0] = 0;
 
         short symbol = 1, opp = 0;
-        AIBot bot = new AIBot(symbol, opp);
-        bot.setBoard(board);
+        Agent opponent = new Agent(symbol, opp);
+        opponent.setBoard(board);
 
         System.out.println(bot.getNextMove().getKey() + " " + bot.getNextMove().getValue() );
     }
-
 }
